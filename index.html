@@ -156,15 +156,16 @@
   @keyframes float-mascot{ 0%,100%{ transform:rotate(6deg); } 50%{ transform:translateY(-6px) rotate(2deg); } }
 
   /* trailer video dọc: cột phải của hero */
-  .hero-trailer{ flex:0 0 auto; width:clamp(230px, 22vw, 290px); }
-  .hero-trailer .video-frame.vertical{ max-width:100%; }
+  .hero-trailer{ flex:0 0 auto; width:clamp(210px, 18vw, 250px); }
+  .hero-trailer .video-frame.vertical{ max-width:100%; aspect-ratio:1180/2560; }
+  .video-frame video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000; display:block; }
   .hero-trailer{ align-items:center; text-align:center; }
   .hero-trailer h3{ font-size:14px; line-height:1.35; text-align:center; margin-top:2px; }
 
   @media (max-width:860px){
     .hero-flex{ flex-direction:column; align-items:flex-start; gap:40px; }
     .hero-inner{ max-width:100%; }
-    .hero-trailer{ width:min(78vw, 280px); align-self:center; }
+    .hero-trailer{ width:min(66vw, 250px); align-self:center; }
     .hero .mascot{ animation:none; }
   }
 
@@ -463,7 +464,7 @@
     <div class="video-card featured hero-trailer">
         <span class="badge">Trailer</span>
         <div class="video-frame vertical">
-          <button class="poster" type="button" id="trailerPoster" data-src="https://drive.google.com/file/d/1LBkGVQiWDENv7nJQQ_OgvXViKeFdxZaf/preview" aria-label="Phát video trailer Tiểu OA OA">
+          <button class="poster" type="button" id="trailerPoster" data-video="trailer.mp4" aria-label="Phát video trailer Tiểu OA OA">
             <img class="astro-logo" alt="Tiểu OA OA">
             <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
             <span class="poster-cap">Bấm để xem trailer</span>
@@ -705,12 +706,15 @@
   const poster = document.getElementById('trailerPoster');
   if(poster){
     poster.addEventListener('click', () => {
-      const f = document.createElement('iframe');
-      f.src = poster.dataset.src;
-      f.title = 'Trailer — ASTRO TIỂU OA OA';
-      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-      f.allowFullscreen = true;
-      poster.replaceWith(f);
+      const v = document.createElement('video');
+      v.src = poster.dataset.video;
+      v.controls = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.preload = 'auto';
+      v.setAttribute('aria-label', 'Trailer — ASTRO TIỂU OA OA');
+      poster.replaceWith(v);
+      v.play().catch(() => {});
     });
   }
 
